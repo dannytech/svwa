@@ -7,16 +7,16 @@
     if(isset($_POST["username"]) && isset($_POST["password"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
-
-        $conn = mysqli_connect("db", "svwa", "svwaissecure!", "svwa");
         
-        $res = mysqli_query($conn, "SELECT * FROM Users WHERE username='$username'");
-        if($res->num_rows > 0) {
+        $stmt = $conn->prepare("SELECT * FROM Users WHERE username=:username;");
+        $stmt->execute([ ":username" => $username ]);
+        if($stmt->rowCount() > 0) {
             echo "<div>User '$username' already exists</div>"; // VULNERABILITY: User enumeration, XSS
         } else {
             $salt = substr(md5(rand()), 0, 4);
-            $hash = md5($password . $salt);
-            $res = mysqli_query($conn, "INSERT INTO Users (username, passhash, salt) VALUES ('$username', '$hash', '$salt');"); // VULNERABILITY: SQLi
+            $hash = md5($password . $salt); // VULNERABILITY: MD5 hashing
+            $stmt = $conn->prepare("INSERT INTO Users (username, passhash, salt) VALUE (:username, :passhash, :salt);");
+            $stmt->execute([ ":username" => $username, ":passhash" => $hash, ":salt" => $salt ]);
 
             header("Location: index.php?page=login");
         }

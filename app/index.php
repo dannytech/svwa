@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,14 +9,15 @@
     </head>
     <body>
         <?php
-            session_start();
-            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // VULNERABILITY: Excessive logging
-
             $page = $_GET["page"];
-
+            
             if ($page == null) header("Location: index.php?page=login");
 
+            $conn = new PDO("mysql:host=db;dbname=svwa", "svwa", "svwaissecure!");
+
             include "pages/$page.php"; // VULNERABILITY: Local File Inclusion
+
+            $conn = null;
         ?>
     </body>
 </html>

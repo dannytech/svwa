@@ -8,17 +8,17 @@
         $username = $_POST["username"];
         $password = $_POST["password"];
 
-        $conn = mysqli_connect("db", "svwa", "svwaissecure!", "svwa");
+        $stmt = $conn->prepare("SELECT id, passhash, salt FROM Users WHERE username=:username;");
+        $stmt->execute([ ":username" => $username ]);
 
-        $res = mysqli_query($conn, "SELECT id, passhash, salt FROM Users WHERE username='$username' UNION SELECT id, passhash, salt FROM Users"); // VULNERABILITY: SQLi without Login Bypass
+        if($stmt->rowCount() > 0) {
+            $row = $stmt->fetch();
+            var_dump($row);
 
-        if($res->num_rows > 0) {
-            $row = mysqli_fetch_object($res);
+            $hash = md5($password . $row["salt"]);
 
-            $hash = md5($password . $row->salt); // VULNERABILITY: MD5 hashing
-
-            if($hash == $row->passhash) {
-                $_SESSION["id"] = $row->id;
+            if($hash == $row["passhash"]) {
+                $_SESSION["id"] = $row["id"];
                 if(isset($_POST["admin"])) {
                     $_SESSION["admin"] = $_POST["admin"];
                 } else {

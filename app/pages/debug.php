@@ -13,10 +13,9 @@
     </tr>
     <?php
         // Logs out all user data
-        $conn = mysqli_connect("db", "svwa", "svwaissecure!", "svwa");
-        $res = mysqli_query($conn, "SELECT * from Users") or die(mysqli_error($conn));
+        $res = $conn->query("SELECT * from Users;");
         
-        while($row = mysqli_fetch_array($res)) {
+        while($row = $res->fetch()) {
             echo "<tr>
                 <td>" . $row["id"] . "</td>
                 <td>" . htmlspecialchars($row["username"]) . "</td>
@@ -24,7 +23,5 @@
                 <td>" . $row["salt"] . "</td>
             </tr>";
         }
-
-        mysqli_close($conn);
     ?>
 </table>
