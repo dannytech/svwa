@@ -1,0 +1,31 @@
+version: "3"
+services:
+  app:
+    build: ./php/
+    ports:
+      - 8080:80
+    volumes:
+      - ${PWD}/app:/var/www/html
+      - ${PWD}/php.ini:/usr/local/etc/php/php.ini
+    links:
+      - db
+  db:
+    image: mysql:8.0.1
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: svwa
+      MYSQL_USER: svwa
+      MYSQL_PASSWORD: svwaissecure!
+    volumes:
+      - ${PWD}/initialize_db.sql:/docker-entrypoint-initdb.d/setup.sql
+  myadmin:
+    image: phpmyadmin/phpmyadmin:4.9
+    depends_on:
+      - db
+    ports:
+      - 8081:80
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: password
