@@ -44,8 +44,10 @@
         <input type="password" placeholder="Password" name="password" required />
     </div>
 
-    <input type="checkbox" style="display: none;" name="admin" /> <?php // VULNERABILITY: Hidden form field ?>
+    <input type="checkbox" style="display: none;" name="admin" /> <?php // VULNERABILITY: Unauthorized administrator privileges, hidden field ?>
 
     <input type="submit" />
+
+    <!-- For testing: test, test. Be sure to remove this in production! --> <?php // VULNERABILITY: Test credentials ?>
 </form>
 <a href="index.php?page=register">Register</a>
