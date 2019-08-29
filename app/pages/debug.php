@@ -1,4 +1,7 @@
-<?php // VULNERABILITY: Hidden page in robots.txt ?>
+<?php
+    // VULNERABILITY: Hidden page in robots.txt
+    array_push($flags, [ "id" => "Hidden_Page", "flag" => "Found a hidden page in robots.txt", "points" => 100 ]);
+?>
 
 <form action="admin.php"> <?php // VULNERABILITY: Hidden administrator page ?>
     <button disabled>Administrator console</button>
