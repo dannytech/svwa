@@ -8,7 +8,7 @@
         if($stmt->rowCount() > 0) {
             $row = $stmt->fetch();
 
-            echo "Welcome, " . htmlspecialentities($row["username"]);
+            echo "Welcome, " . htmlspecialchars($row["username"]);
         }
     } else {
         header("Location: index.php?page=login");

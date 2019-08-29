@@ -15,6 +15,7 @@
 
             $conn = new PDO("mysql:host=db;dbname=svwa", "svwa", "svwaissecure!");
 
+            header("X-XSS-Protection: 0");
             include "pages/$page.php"; // VULNERABILITY: Local File Inclusion
 
             $conn = null;
